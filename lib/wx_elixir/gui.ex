@@ -19,7 +19,16 @@ defmodule WxElixir.Gui do
     panel = :wxPanel.new(frame, [])
     :wxPanel.connect(panel, :paint, [:callback])
 
-    button = :wxButton.new(panel, @wxID_ANY, label: 'A button')
+    button = :wxButton.new(frame, :wx_const.id_any(), label: 'button')
+    text = :wxTextCtrl.new(frame, -1)
+
+    sizer = :wxBoxSizer.new(8)
+    :wxSizer.add(sizer,  button)
+    :wxSizer.add(sizer,  text)
+
+    :wxWindow.setSizer(frame, sizer)
+    :wxSizer.setSizeHints(sizer, frame)
+
 
     :wxFrame.show(frame)
 
