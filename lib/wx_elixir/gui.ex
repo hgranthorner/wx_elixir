@@ -1,26 +1,16 @@
-defmodule WxElixir do
+defmodule WxElixir.Gui do
   # Copy pasted from https://gist.github.com/rlipscombe/5f400451706efde62acbbd80700a6b7c
   @behaviour :wx_object
 
   @title "Canvas Example"
   @size {600, 600}
-
-  def child_spec(opts) do
-    %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, [opts]},
-      # type: :worker,
-      # restart: :permanent,
-      # shutdown: 500
-    }
-  end
+  @wxID_ANY -1
 
   def start_link(_opts) do
-    {:wx_ref, _, :wxFrame, pid}  = :wx_object.start_link(__MODULE__, [], [])
-    {:ok, pid}
+    :wx_object.start_link(__MODULE__, [], [])
   end
 
-  def init(args \\ []) do
+  def init(_args \\ []) do
     wx = :wx.new()
     frame = :wxFrame.new(wx, -1, @title, size: @size)
     :wxFrame.connect(frame, :size)
@@ -28,6 +18,8 @@ defmodule WxElixir do
 
     panel = :wxPanel.new(frame, [])
     :wxPanel.connect(panel, :paint, [:callback])
+
+    button = :wxButton.new(panel, @wxID_ANY, label: 'A button')
 
     :wxFrame.show(frame)
 
@@ -44,7 +36,7 @@ defmodule WxElixir do
     {:stop, :normal, state}
   end
 
-  def handle_sync_event({:wx, _, _, _, {:wxPaint, :paint}}, _, state = %{panel: panel}) do
+  def handle_sync_event({:wx, _, _, _, {:wxPaint, :paint}}, _, _state = %{panel: panel}) do
     brush = :wxBrush.new()
     :wxBrush.setColour(brush, {255, 255, 255, 255})
 

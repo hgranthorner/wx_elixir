@@ -5,10 +5,15 @@ defmodule WxElixir.Application do
 
   use Application
 
+  def restart do
+    Supervisor.stop(WxElixir.Supervisor)
+    start(nil, nil)
+  end
+
   @impl true
   def start(_type, _args) do
     children = [
-      WxElixir
+      WxElixir.Server
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
