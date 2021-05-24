@@ -8,8 +8,7 @@ defmodule WxElixir.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: WxElixir.Worker.start_link(arg)
-      # {WxElixir.Worker, arg}
+      WxElixir
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
