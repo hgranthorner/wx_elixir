@@ -1,21 +1,8 @@
 # WxElixir
 
-**TODO: Add description**
+Play around with wxwidgets in elixir. Feel free to use an example if you're also interested.
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `wx_elixir` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:wx_elixir, "~> 0.1.0"}
-  ]
-end
+## To Run
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/wx_elixir](https://hexdocs.pm/wx_elixir).
-
+mix run --no-halt
+```
