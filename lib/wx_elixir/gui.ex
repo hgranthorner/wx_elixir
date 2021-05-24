@@ -3,8 +3,6 @@ defmodule WxElixir.Gui do
   @behaviour :wx_object
 
   @title "Canvas Example"
-  @size {600, 600}
-  @wxID_ANY -1
 
   def start_link(_opts) do
     :wx_object.start_link(__MODULE__, [], [])
@@ -12,47 +10,40 @@ defmodule WxElixir.Gui do
 
   def init(_args \\ []) do
     wx = :wx.new()
-    frame = :wxFrame.new(wx, -1, @title, size: @size)
-    :wxFrame.connect(frame, :size)
+    frame = :wxFrame.new(wx, 1, @title)
+
     :wxFrame.connect(frame, :close_window)
 
-    panel = :wxPanel.new(frame, [])
-    :wxPanel.connect(panel, :paint, [:callback])
-
     button = :wxButton.new(frame, :wx_const.id_any(), label: 'button')
-    text = :wxTextCtrl.new(frame, -1)
+    text = :wxTextCtrl.new(frame, :wx_const.id_any())
 
-    sizer = :wxBoxSizer.new(8)
-    :wxSizer.add(sizer,  button)
-    :wxSizer.add(sizer,  text)
+    sizer = :wxBoxSizer.new(:wx_const.vertical())
+    :wxSizer.add(sizer, button)
+    :wxSizer.add(sizer, text)
 
     :wxWindow.setSizer(frame, sizer)
     :wxSizer.setSizeHints(sizer, frame)
 
+    :wxButton.connect(
+      button,
+      :command_button_clicked,
+      callback: &handle_click/2,
+      userData: %{text: text}
+    )
 
     :wxFrame.show(frame)
 
-    state = %{panel: panel}
+    state = %{button: button, text: text}
     {frame, state}
   end
 
-  def handle_event({:wx, _, _, _, {:wxSize, :size, size, _}}, state = %{panel: panel}) do
-    :wxPanel.setSize(panel, size)
-    {:noreply, state}
+  def handle_click({:wx, _id, _button, %{text: text}, _click_info}, _command_info) do
+    text
+    |> :wxTextCtrl.getValue()
+    |> IO.inspect()
   end
 
   def handle_event({:wx, _, _, _, {:wxClose, :close_window}}, state) do
     {:stop, :normal, state}
-  end
-
-  def handle_sync_event({:wx, _, _, _, {:wxPaint, :paint}}, _, _state = %{panel: panel}) do
-    brush = :wxBrush.new()
-    :wxBrush.setColour(brush, {255, 255, 255, 255})
-
-    dc = :wxPaintDC.new(panel)
-    :wxDC.setBackground(dc, brush)
-    :wxDC.clear(dc)
-    :wxPaintDC.destroy(dc)
-    :ok
   end
 end
