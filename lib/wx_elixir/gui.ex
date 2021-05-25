@@ -18,8 +18,8 @@ defmodule WxElixir.Gui do
     text = :wxTextCtrl.new(frame, :wx_const.id_any())
 
     sizer = :wxBoxSizer.new(:wx_const.vertical())
-    :wxSizer.add(sizer, button)
-    :wxSizer.add(sizer, text)
+    :wxSizer.add(sizer, button, flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()), border: 10)
+    :wxSizer.add(sizer, text, flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()), border: 10)
 
     :wxWindow.setSizer(frame, sizer)
     :wxSizer.setSizeHints(sizer, frame)
