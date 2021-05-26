@@ -19,10 +19,9 @@ defmodule WxElixir.Gui do
     sizer = :wxBoxSizer.new(:wx_const.vertical())
     box = :wxListBox.new(frame, :wx_const.id_any())
 
-    :wxSizer.add(sizer, button, flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()), border: 10)
-
-    :wxSizer.add(sizer, text, flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()), border: 10)
-    :wxSizer.add(sizer, box, flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()), border: 10)
+    :wxSizer.add(sizer, text, flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()), border: 5)
+    :wxSizer.add(sizer, button, flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()), border: 5)
+    :wxSizer.add(sizer, box, flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()), border: 5)
 
     :wxWindow.setSizer(frame, sizer)
     :wxSizer.setSizeHints(sizer, frame)
@@ -40,22 +39,18 @@ defmodule WxElixir.Gui do
     {frame, state}
   end
 
-  def handle_click({:wx, _id, _button, %{text: text}, _click_info}, _command_info) do
-    text
-    |> :wxTextCtrl.getValue()
-    |> IO.inspect()
-  end
-
   def handle_event({:wx, _id, _ref, _userData, {:wxClose, :close_window}}, state) do
     {:stop, :normal, state}
   end
 
   def handle_event(
         {:wx, _event_sender_id, _event_handler, _userData,
-         {:wxCommand, :command_button_clicked, _, _, _}} = thing,
-        %{box: box} = state
+         {:wxCommand, :command_button_clicked, _, _, _}} = _thing,
+        %{text: textbox, box: box} = state
       ) do
-    :ok = :wxListBox.insertItems(box, ['hello world\n itsa me'], 0)
+    text = textbox |> :wxTextCtrl.getValue()
+    :ok = :wxListBox.insertItems(box, [text], 0)
+    :ok = :wxTextCtrl.setValue(textbox, '')
     {:noreply, state}
   end
 

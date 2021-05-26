@@ -6,7 +6,7 @@ defmodule WxElixir.Application do
   use Application
 
   def restart do
-    Supervisor.stop(WxElixir.Supervisor)
+    :ok = Supervisor.stop(WxElixir.Supervisor)
     start(nil, nil)
   end
 

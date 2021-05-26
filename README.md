@@ -15,7 +15,7 @@ The idea would be that I could start a task by either typing in the name of the 
 
 ## Steps to get there
 
-1. Be able to add items based on an input
+1. Be able to add items based on an input - done
 2. Be able to update those items with the correct time stamps
 - Each item would be a struct with multiple time ranges, but one big ol' notes section
 3. Be able to read and write those structs to disk (persistence)
