@@ -19,3 +19,6 @@ The idea would be that I could start a task by either typing in the name of the 
 2. Be able to update those items with the correct time stamps
 - Each item would be a struct with multiple time ranges, but one big ol' notes section
 3. Be able to read and write those structs to disk (persistence)
+
+## Issues
+- Selected text doesn't stay selected after an item is added - instead, the selection index stays the same as the item goes down
