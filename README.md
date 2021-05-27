@@ -22,3 +22,5 @@ The idea would be that I could start a task by either typing in the name of the 
 
 ## Issues
 - Selected text doesn't stay selected after an item is added - instead, the selection index stays the same as the item goes down
+- Note should be disabled if a task is not selected.
+- Adding a task should automatically select it if no tasks exist yet.

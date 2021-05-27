@@ -44,4 +44,19 @@ defmodule WxElixir.Task.Store do
         false
     end
   end
+
+  @doc """
+  Adds notes to an existing task.
+  If the task exists, :ok is returned. If the task does not exist, :error is returned.
+  """
+  @spec set_notes(String.t(), String.t()) :: :ok | :error
+  def set_notes(name, notes) when is_binary(name) and is_binary(notes) do
+    if exists?(name) do
+      Agent.update(__MODULE__, fn state -> Map.update!(state, name, &%Task{&1 | notes: notes}) end)
+
+      :ok
+    else
+      :error
+    end
+  end
 end

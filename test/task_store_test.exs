@@ -29,4 +29,12 @@ defmodule TaskStoreTest do
     :ok = Store.put(Task.new("a task"))
     assert Store.exists?("a task") == true
   end
+
+  test "can add notes to a task" do
+    :ok = Store.put(Task.new("a task"))
+    :ok = Store.set_notes("a task", "hello")
+    :ok = Store.set_notes("a task", "hello again")
+    {:ok, task} = Store.get_task("a task")
+    assert task.notes == "hello again"
+  end
 end
