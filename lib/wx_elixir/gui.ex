@@ -16,7 +16,7 @@ defmodule WxElixir.Gui do
 
     :wxFrame.connect(frame, :close_window)
 
-    button = :wxButton.new(frame, 420, label: 'button')
+    button = :wxButton.new(frame, 420, label: 'enter')
     text = :wxTextCtrl.new(frame, :wx_const.id_any())
     sizer = :wxBoxSizer.new(:wx_const.vertical())
     box = :wxListBox.new(frame, :wx_const.id_any())
@@ -31,8 +31,12 @@ defmodule WxElixir.Gui do
     :wxButton.connect(
       button,
       :command_button_clicked,
-      # callback: &handle_click/2,
       userData: %{text: text}
+    )
+
+    :wxTextCtrl.connect(
+      text,
+      :command_text_updated
     )
 
     :wxFrame.show(frame)
@@ -60,6 +64,19 @@ defmodule WxElixir.Gui do
 
     :ok = :wxListBox.insertItems(box, [text], 0)
     :ok = :wxTextCtrl.setValue(textbox, '')
+    {:noreply, state}
+  end
+
+  def handle_event(
+        {:wx, _, _, _, {_, :command_text_updated, text, _, _}},
+        %{button: button} = state
+      ) do
+    if Store.exists?(to_string(text)) do
+      :wxButton.disable(button)
+    else
+      :wxButton.enable(button)
+    end
+
     {:noreply, state}
   end
 
