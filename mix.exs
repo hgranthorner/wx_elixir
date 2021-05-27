@@ -7,6 +7,7 @@ defmodule WxElixir.MixProject do
       version: "0.1.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
+      aliases: [test: "test --no-start"],
       deps: deps()
     ]
   end

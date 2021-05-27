@@ -59,8 +59,39 @@ defmodule WxElixir.Task do
   end
 
   @doc """
-  Pauses a running task.
+  Pauses a running task. This closes out the active timestamp tuple and updates the task status.
+  If the task is already paused, nothing happens and the task is returned.
+
+  ## Examples
+
+    iex Task.new("a task") |> Task.activate() |> Task.pause()
+    %Task{name: "a task", status: "Paused"}
+
   """
-  def pause do
+  @spec pause(t()) :: t()
+  def pause(task) when is_struct(task, Task) do
+    case String.downcase(task.status) do
+      "paused" ->
+        task
+
+      _ ->
+        %Task{
+          task
+          | status: "Paused",
+            timestamps:
+              Enum.map(
+                task.timestamps,
+                fn {start_dt, end_dt} ->
+                  case end_dt do
+                    nil ->
+                      {start_dt, DateTime.utc_now()}
+
+                    _ ->
+                      {start_dt, end_dt}
+                  end
+                end
+              )
+        }
+    end
   end
 end

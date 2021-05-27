@@ -13,7 +13,8 @@ defmodule WxElixir.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      WxElixir.Server
+      WxElixir.Server,
+      {WxElixir.Task.Store, %{}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -1,6 +1,8 @@
 defmodule WxElixir.Gui do
   # Copy pasted from https://gist.github.com/rlipscombe/5f400451706efde62acbbd80700a6b7c
   @behaviour :wx_object
+  alias WxElixir.Task.Store
+  alias WxElixir.Task
 
   @title "Canvas Example"
 
@@ -49,6 +51,13 @@ defmodule WxElixir.Gui do
         %{text: textbox, box: box} = state
       ) do
     text = textbox |> :wxTextCtrl.getValue()
+
+    :ok =
+      text
+      |> to_string()
+      |> Task.new()
+      |> Store.put()
+
     :ok = :wxListBox.insertItems(box, [text], 0)
     :ok = :wxTextCtrl.setValue(textbox, '')
     {:noreply, state}
