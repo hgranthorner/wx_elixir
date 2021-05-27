@@ -37,6 +37,7 @@ defmodule WxElixir.Gui do
     :wxTextCtrl.connect(
       text,
       :command_text_updated
+      userData: :name_input
     )
 
     :wxFrame.show(frame)
@@ -69,6 +70,7 @@ defmodule WxElixir.Gui do
 
   def handle_event(
         {:wx, _, _, _, {_, :command_text_updated, text, _, _}},
+        {:wx, _, _, :name_input, {_, :command_text_updated, text, _, _}},
         %{button: button} = state
       ) do
     if Store.exists?(to_string(text)) do
