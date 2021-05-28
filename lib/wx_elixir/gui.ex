@@ -1,6 +1,7 @@
 defmodule WxElixir.Gui do
   # Copy pasted from https://gist.github.com/rlipscombe/5f400451706efde62acbbd80700a6b7c
   @behaviour :wx_object
+  use WxElixir.Macros
   alias WxElixir.Task.Store
   alias WxElixir.Task
 
@@ -15,15 +16,11 @@ defmodule WxElixir.Gui do
     {frame, state}
   end
 
-  def handle_event({:wx, _id, _ref, _userData, {:wxClose, :close_window}}, state) do
+  def handle_event({:wx, _, _, _, {:wxClose, :close_window}}, state) do
     {:stop, :normal, state}
   end
 
-  def handle_event(
-        {:wx, _event_sender_id, _event_handler, _userData,
-         {:wxCommand, :command_button_clicked, _, _, _}} = _thing,
-        %{name_input: name_input, box: box} = state
-      ) do
+  defevent(:add_task, :command_button_clicked, _, %{name_input: name_input, box: box} = state) do
     text = name_input |> :wxTextCtrl.getValue()
 
     :ok =
@@ -40,17 +37,14 @@ defmodule WxElixir.Gui do
     if previous_selection != '' do
       true = :wxControlWithItems.setStringSelection(box, previous_selection)
     else
-      true = :wxControlWithItems.setStringSelection(box, text)  
+      true = :wxControlWithItems.setStringSelection(box, text)
     end
-    
+
     :ok = :wxTextCtrl.setValue(name_input, '')
     {:noreply, state}
   end
 
-  def handle_event(
-        {:wx, _, _, :name_input, {_, :command_text_updated, text, _, _}},
-        %{button: button} = state
-      ) do
+  defevent(:name_input, :command_text_updated, text, %{button: button} = state) do
     if Store.exists?(to_string(text)) do
       :wxButton.disable(button)
     else
@@ -60,10 +54,7 @@ defmodule WxElixir.Gui do
     {:noreply, state}
   end
 
-  def handle_event(
-        {:wx, _, _, :notes, {_, :command_text_updated, text, _, _}},
-        %{box: box} = state
-      ) do
+  defevent(:notes, :command_text_updated, text, %{box: box} = state) do
     selection = :wxControlWithItems.getStringSelection(box) |> to_string()
 
     if Store.exists?(selection) do
@@ -77,10 +68,7 @@ defmodule WxElixir.Gui do
     {:noreply, state}
   end
 
-  def handle_event(
-        {:wx, _, _, :item_selected, {_, :command_listbox_selected, text, _, _}},
-        %{notes: notes} = state
-      ) do
+  defevent(:item_selected, :command_listbox_selected, text, %{notes: notes} = state) do
     name = to_string(text)
 
     case Store.get_task(name) do

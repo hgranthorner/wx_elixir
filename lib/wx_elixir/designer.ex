@@ -46,7 +46,7 @@ defmodule WxElixir.Gui.Designer do
     :wxButton.connect(
       button,
       :command_button_clicked,
-      userData: %{text: name_input}
+      userData: :add_task
     )
 
     :wxTextCtrl.connect(
