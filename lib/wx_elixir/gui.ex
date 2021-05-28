@@ -32,7 +32,17 @@ defmodule WxElixir.Gui do
       |> Task.new()
       |> Store.put()
 
-    :ok = :wxListBox.insertItems(box, [text], 0)
+    count = :wxListBox.getCount(box)
+    previous_selection = :wxControlWithItems.getStringSelection(box)
+
+    :ok = :wxListBox.insertItems(box, [text], count)
+
+    if previous_selection != '' do
+      true = :wxControlWithItems.setStringSelection(box, previous_selection)
+    else
+      true = :wxControlWithItems.setStringSelection(box, text)  
+    end
+    
     :ok = :wxTextCtrl.setValue(name_input, '')
     {:noreply, state}
   end
