@@ -21,7 +21,7 @@ The idea would be that I could start a task by either typing in the name of the 
 3. Be able to read and write those structs to disk (persistence)
 
 ## Issues
-- Note should be disabled if a task is not selected.
+- Notes should be disabled if a task is not selected.
 
 ## Completed Issues
 - Selected text doesn't stay selected after an item is added - instead, the selection index stays the same as the item goes down

@@ -69,6 +69,9 @@ defmodule WxElixir.Gui.Designer do
 
     :wxFrame.show(frame)
 
+    :wxButton.disable(button)
+    :wxTextCtrl.disable(notes)
+
     state = %{
       frame: frame,
       sizer: panel_sizer,

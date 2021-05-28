@@ -1,5 +1,4 @@
 defmodule WxElixir.Gui do
-  # Copy pasted from https://gist.github.com/rlipscombe/5f400451706efde62acbbd80700a6b7c
   @behaviour :wx_object
   use WxElixir.Macros
   alias WxElixir.Task.Store
@@ -20,7 +19,12 @@ defmodule WxElixir.Gui do
     {:stop, :normal, state}
   end
 
-  defevent(:add_task, :command_button_clicked, _, %{name_input: name_input, box: box} = state) do
+  defevent(
+    :add_task,
+    :command_button_clicked,
+    _,
+    %{name_input: name_input, box: box, button: button, notes: notes} = state
+  ) do
     text = name_input |> :wxTextCtrl.getValue()
 
     :ok =
@@ -38,9 +42,11 @@ defmodule WxElixir.Gui do
       true = :wxControlWithItems.setStringSelection(box, previous_selection)
     else
       true = :wxControlWithItems.setStringSelection(box, text)
+      :wxTextCtrl.enable(notes)
     end
 
     :ok = :wxTextCtrl.setValue(name_input, '')
+    :wxButton.disable(button)
     {:noreply, state}
   end
 
@@ -70,6 +76,7 @@ defmodule WxElixir.Gui do
 
   defevent(:item_selected, :command_listbox_selected, text, %{notes: notes} = state) do
     name = to_string(text)
+    :wxTextCtrl.enable(notes)
 
     case Store.get_task(name) do
       {:ok, task} ->
