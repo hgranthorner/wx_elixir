@@ -9,7 +9,7 @@ defmodule WxElixir.Gui.Designer do
     name_input = :wxTextCtrl.new(frame, :wx_const.id_any())
     panel_sizer = :wxBoxSizer.new(:wx_const.vertical())
     main_sizer = :wxBoxSizer.new(:wx_const.horizontal())
-    box = :wxListBox.new(frame, :wx_const.id_any())
+    list = :wxListBox.new(frame, :wx_const.id_any())
 
     :wxSizer.add(panel_sizer, name_input,
       flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()),
@@ -21,7 +21,7 @@ defmodule WxElixir.Gui.Designer do
       border: 5
     )
 
-    :wxSizer.add(panel_sizer, box,
+    :wxSizer.add(panel_sizer, list,
       flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()),
       border: 5
     )
@@ -62,7 +62,7 @@ defmodule WxElixir.Gui.Designer do
     )
 
     :wxListBox.connect(
-      box,
+      list,
       :command_listbox_selected,
       userData: :item_selected
     )
@@ -77,7 +77,7 @@ defmodule WxElixir.Gui.Designer do
       sizer: panel_sizer,
       button: button,
       name_input: name_input,
-      box: box,
+      list: list,
       notes: notes
     }
 

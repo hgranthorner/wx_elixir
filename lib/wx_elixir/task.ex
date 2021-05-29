@@ -15,6 +15,8 @@ defmodule WxElixir.Task do
           timestamps: [{DateTime.t(), DateTime.t() | nil}]
         }
 
+  @statuses MapSet.new(["Active", "Paused", "Done"])
+
   @doc """
   Creates a new task with a given name.
 
@@ -94,6 +96,12 @@ defmodule WxElixir.Task do
         }
     end
   end
+
+  @doc """
+  Returns the possible statuses for a task.
+  """
+  @spec statuses() :: MapSet.t(String.t())
+  def statuses(), do: MapSet.new(@statuses)
 
   def fetch(task, key), do: Map.fetch(task, key)
   def get_and_update(task, key, func), do: Map.get_and_update(task, key, func)

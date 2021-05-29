@@ -1,8 +1,6 @@
 defmodule WxElixir.Gui do
   @behaviour :wx_object
   use WxElixir.Macros
-  alias WxElixir.Task.Store
-  alias WxElixir.Task
 
   @title "Tasks"
 
@@ -11,10 +9,10 @@ defmodule WxElixir.Gui do
   end
 
   def init(_args \\ []) do
-    {_wx, frame, %{box: box} = state} = WxElixir.Gui.Designer.setup_gui(@title)
+    {_wx, frame, %{list: list} = state} = WxElixir.Gui.Designer.setup_gui(@title)
 
     for task <- Store.get_tasks() do
-      append_to_list_box(box, task.name)
+      append_to_list_box(list, task.name)
     end
 
     {frame, state}
@@ -28,7 +26,7 @@ defmodule WxElixir.Gui do
     :add_task,
     :command_button_clicked,
     _,
-    %{name_input: name_input, box: box, button: button, notes: notes} = state
+    %{name_input: name_input, list: list, button: button, notes: notes} = state
   ) do
     %Task{name: task_name} =
       name_input
@@ -37,14 +35,14 @@ defmodule WxElixir.Gui do
       |> Task.new()
       |> Store.put()
 
-    previous_selection = :wxControlWithItems.getStringSelection(box)
+    previous_selection = :wxControlWithItems.getStringSelection(list)
 
-    append_to_list_box(box, task_name)
+    append_to_list_box(list, task_name)
 
     if previous_selection != '' do
-      true = :wxControlWithItems.setStringSelection(box, previous_selection)
+      true = :wxControlWithItems.setStringSelection(list, previous_selection)
     else
-      true = :wxControlWithItems.setStringSelection(box, task_name)
+      true = :wxControlWithItems.setStringSelection(list, task_name)
       :wxTextCtrl.enable(notes)
     end
 
@@ -63,8 +61,8 @@ defmodule WxElixir.Gui do
     {:noreply, state}
   end
 
-  defevent(:notes, :command_text_updated, text, %{box: box} = state) do
-    selection = :wxControlWithItems.getStringSelection(box) |> to_string()
+  defevent(:notes, :command_text_updated, text, %{list: list} = state) do
+    selection = :wxControlWithItems.getStringSelection(list) |> to_string()
 
     if Store.exists?(selection) do
       str =
@@ -101,9 +99,9 @@ defmodule WxElixir.Gui do
     {:noreply, state}
   end
 
-  defp append_to_list_box(box, text) do
-    count = :wxListBox.getCount(box)
-    :ok = :wxListBox.insertItems(box, [text], count)
-    box
+  defp append_to_list_box(list, text) do
+    count = :wxListBox.getCount(list)
+    :ok = :wxListBox.insertItems(list, [text], count)
+    list
   end
 end

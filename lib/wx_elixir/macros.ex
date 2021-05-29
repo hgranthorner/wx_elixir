@@ -2,6 +2,8 @@ defmodule WxElixir.Macros do
   defmacro __using__(_opts) do
     quote do
       import WxElixir.Macros
+      alias WxElixir.Task
+      alias WxElixir.Task.Store
     end
   end
 
