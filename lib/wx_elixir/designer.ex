@@ -5,11 +5,11 @@ defmodule WxElixir.Gui.Designer do
 
     :wxFrame.connect(frame, :close_window)
 
+    # Left side elements
     button = :wxButton.new(frame, 420, label: 'enter')
     name_input = :wxTextCtrl.new(frame, :wx_const.id_any())
-    panel_sizer = :wxBoxSizer.new(:wx_const.vertical())
-    main_sizer = :wxBoxSizer.new(:wx_const.horizontal())
     list = :wxListBox.new(frame, :wx_const.id_any())
+    panel_sizer = :wxBoxSizer.new(:wx_const.vertical())
 
     :wxSizer.add(panel_sizer, name_input,
       flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()),
@@ -26,17 +26,40 @@ defmodule WxElixir.Gui.Designer do
       border: 5
     )
 
+    # Task header
+    status_list = :wxComboBox.new(frame, :wx_const.id_any(), style: :wx_const.cb_readonly())
     notes = :wxTextCtrl.new(frame, :wx_const.id_any(), style: :wx_const.te_multiline())
 
-    :wxSizer.add(main_sizer, panel_sizer,
+    task_header_sizer = :wxBoxSizer.new(:wx_const.horizontal())
+
+    :wxBoxSizer.add(task_header_sizer, status_list,
+      flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()),
+      border: 5
+    )
+
+    # Overall Task section
+    task_sizer = :wxBoxSizer.new(:wx_const.vertical())
+
+    :wxSizer.add(task_sizer, task_header_sizer, proportion: 1)
+
+    :wxSizer.add(task_sizer, notes,
       flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()),
       border: 5,
+      proportion: 3
+    )
+
+    # Frame sizer
+    main_sizer = :wxBoxSizer.new(:wx_const.horizontal())
+
+    :wxSizer.add(
+      main_sizer,
+      panel_sizer,
       proportion: 1
     )
 
-    :wxSizer.add(main_sizer, notes,
-      flag: Bitwise.bor(:wx_const.expand(), :wx_const.all()),
-      border: 5,
+    :wxSizer.add(
+      main_sizer,
+      task_sizer,
       proportion: 2
     )
 
@@ -67,10 +90,16 @@ defmodule WxElixir.Gui.Designer do
       userData: :item_selected
     )
 
-    :wxFrame.show(frame)
+    :wxComboBox.insertStrings(
+      status_list,
+      WxElixir.Task.statuses() |> Enum.map(&to_charlist/1),
+      0
+    )
 
     :wxButton.disable(button)
     :wxTextCtrl.disable(notes)
+
+    :wxFrame.show(frame)
 
     state = %{
       frame: frame,
