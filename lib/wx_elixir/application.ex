@@ -12,9 +12,10 @@ defmodule WxElixir.Application do
 
   @impl true
   def start(_type, _args) do
+    # Order matters here - the gui is dependent on the agent being up
     children = [
-      WxElixir.Server,
-      {WxElixir.Task.Store, %{}}
+      {WxElixir.Task.Store, [write_to_disk: true]},
+      WxElixir.Server
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

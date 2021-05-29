@@ -94,4 +94,8 @@ defmodule WxElixir.Task do
         }
     end
   end
+
+  def fetch(task, key), do: Map.fetch(task, key)
+  def get_and_update(task, key, func), do: Map.get_and_update(task, key, func)
+  def pop(data, key), do: Map.pop(data, key)
 end

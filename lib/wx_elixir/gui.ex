@@ -4,14 +4,19 @@ defmodule WxElixir.Gui do
   alias WxElixir.Task.Store
   alias WxElixir.Task
 
-  @title "Canvas Example"
+  @title "Tasks"
 
   def start_link(_opts) do
     :wx_object.start_link(__MODULE__, [], [])
   end
 
   def init(_args \\ []) do
-    {_wx, frame, state} = WxElixir.Gui.Designer.setup_gui(@title)
+    {_wx, frame, %{box: box} = state} = WxElixir.Gui.Designer.setup_gui(@title)
+
+    for task <- Store.get_tasks() do
+      append_to_list_box(box, task.name)
+    end
+
     {frame, state}
   end
 
@@ -25,23 +30,21 @@ defmodule WxElixir.Gui do
     _,
     %{name_input: name_input, box: box, button: button, notes: notes} = state
   ) do
-    text = name_input |> :wxTextCtrl.getValue()
-
-    :ok =
-      text
+    %Task{name: task_name} =
+      name_input
+      |> :wxTextCtrl.getValue()
       |> to_string()
       |> Task.new()
       |> Store.put()
 
-    count = :wxListBox.getCount(box)
     previous_selection = :wxControlWithItems.getStringSelection(box)
 
-    :ok = :wxListBox.insertItems(box, [text], count)
+    append_to_list_box(box, task_name)
 
     if previous_selection != '' do
       true = :wxControlWithItems.setStringSelection(box, previous_selection)
     else
-      true = :wxControlWithItems.setStringSelection(box, text)
+      true = :wxControlWithItems.setStringSelection(box, task_name)
       :wxTextCtrl.enable(notes)
     end
 
@@ -96,5 +99,11 @@ defmodule WxElixir.Gui do
       ) do
     IO.inspect(thing)
     {:noreply, state}
+  end
+
+  defp append_to_list_box(box, text) do
+    count = :wxListBox.getCount(box)
+    :ok = :wxListBox.insertItems(box, [text], count)
+    box
   end
 end

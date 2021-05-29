@@ -5,10 +5,6 @@ defmodule WxElixir.Server do
     GenServer.start_link(__MODULE__, nil)
   end
 
-  def get_wx_info(pid) do
-    GenServer.call(pid, :get_wx_info)
-  end
-
   @impl true
   def init(_) do
     {_, _, _, pid} = WxElixir.Gui.start_link([])
