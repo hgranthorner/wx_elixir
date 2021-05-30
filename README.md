@@ -29,3 +29,50 @@ The idea would be that I could start a task by either typing in the name of the 
 - Selected text doesn't stay selected after an item is added - instead, the selection index stays the same as the item goes down
 - Adding a task should automatically select it if no tasks exist yet.
 - Notes should be disabled if a task is not selected.
+
+## Notes
+
+For missing macros on older versions of OTP, add this to the top of src/wx_const.erl:
+
+%% OTP 24.0 stubs
+-define(wxGRID_DRAW_BOX_RECT, 0).
+-define(wxTEXT_ATTR_BULLET_NAME, 0).
+-define(WXK_CATEGORY_JUMP, 0).
+-define(wxGRID_DRAW_CELL_LINES, 0).
+-define(wxSTB_SHOW_TIPS, 0).
+-define(wxTEXT_ATTR_FONT_FAMILY, 0).
+-define(wxTEXT_ATTR_BULLET_TEXT, 0).
+-define(wxTEXT_ATTR_URL, 0).
+-define(wxICON_AUTH_NEEDED, 0).
+-define(WXK_CATEGORY_PAGING, 0).
+-define(wxELLIPSIZE_FLAGS_EXPAND_TABS, 0).
+-define(wxGRID_DRAW_COLS_HEADER, 0).
+-define(wxSTB_ELLIPSIZE_END, 0).
+-define(wxTEXT_ATTR_FONT_PIXEL_SIZE, 0).
+-define(wxTEXT_ATTR_FONT_ENCODING, 0).
+-define(wxTEXT_ATTR_BULLET_NUMBER, 0).
+-define(wxTEXT_ATTR_CHARACTER_STYLE_NAME, 0).
+-define(wxTOUCH_HORIZONTAL_PAN_GESTURE, 0).
+-define(wxICON_NONE, 0).
+-define(wxBRUSHSTYLE_BDIAGONAL_HATCH, 0).
+-define(wxBRUSHSTYLE_CROSSDIAG_HATCH, 0).
+-define(wxID_MDI_WINDOW_FIRST, 0).
+-define(wxID_MDI_WINDOW_NEXT, 0).
+-define(WXK_CATEGORY_ARROW, 0).
+-define(wxPB_SMALL, 0).
+-define(wxFONTENCODING_CP1361, 0).
+-define(wxFONTENCODING_CP1258, 0).
+-define(wxBITMAP_TYPE_TIFF, 0).
+-define(wxBITMAP_TYPE_TIFF_RESOURCE, 0).
+-define(wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS, 0).
+-define(wxGRID_FLOAT_FORMAT_FIXED, 0).
+-define(wxGRID_DRAW_ROWS_HEADER, 0).
+-define(wxSTB_SIZEGRIP, 0).
+-define(wxTEXT_ATTR_FONT_POINT_SIZE, 0).
+-define(wxTEXT_ATTR_FONT_STRIKETHROUGH, 0).
+-define(wxTEXT_ATTR_BULLET_STYLE, 0).
+-define(wxTEXT_ATTR_EFFECTS, 0).
+-define(wxStrip_CJKMnemonics, 0).
+-define(wxEXEC_NOEVENTS, 0).
+-define(wxTOUCH_VERTICAL_PAN_GESTUREwxICON_NONE, 0).
+-define(wxTOUCH_VERTICAL_PAN_GESTURE, 0).
